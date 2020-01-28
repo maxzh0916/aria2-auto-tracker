@@ -74,7 +74,6 @@ def get_tracker():
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_udp.txt')
         finally:
             result = result + response_trackers_all_udp.read().decode('utf-8').replace('\n\n', ',')
-    print(result)
     return result
 
 
