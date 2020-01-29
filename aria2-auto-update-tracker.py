@@ -18,7 +18,7 @@ config = {
 
 def service_restart():
     os.system('service ' + config['aria2_service_name'] + ' restart')
-    logging.info('重启Aria2服务。')
+    logging.info('重启Aria2服务')
 
 
 def get_tracker():
@@ -27,52 +27,56 @@ def get_tracker():
     response_trackers_all_ip = ''
     response_trackers_all_udp = ''
     result = ''
-    logging.info('开始获取tracker列表。')
+    logging.info('开始获取tracker列表')
     if config['trackers_all_http']:
         try:
+            logging.info('正在从Github加载trackers_all_http列表')
             response_trackers_all_http = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_http.txt')
-            logging.info('正在从Github加载trackers_all_http列表')
         except urllib.error.URLError:
+            logging.info('Github加载trackers_all_http失败')
+            logging.info('正在从CDN服务器加载trackers_all_http列表')
             response_trackers_all_http = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_http.txt')
-            logging.info('正在从CDN服务器加载trackers_all_http列表')
         finally:
             result = result + response_trackers_all_http.read().decode('utf-8').replace('\n\n', ',')
 
     if config['trackers_all_https']:
         try:
+            logging.info('正在从Github加载trackers_all_https列表')
             response_trackers_all_https = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_https.txt')
-            logging.info('正在从Github加载trackers_all_https列表')
         except urllib.error.URLError:
+            logging.info('Github加载trackers_all_https失败')
+            logging.info('正在从CDN服务器加载trackers_all_https列表')
             response_trackers_all_https = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_https.txt')
-            logging.info('正在从CDN服务器加载trackers_all_https列表')
         finally:
             result = result + response_trackers_all_https.read().decode('utf-8').replace('\n\n', ',')
 
     if config['trackers_all_ip']:
         try:
+            logging.info('正在从Github加载trackers_all_ip列表')
             response_trackers_all_ip = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt')
-            logging.info('正在从Github加载trackers_all_ip列表')
         except urllib.error.URLError:
+            logging.info('Github加载trackers_all_ip失败')
+            logging.info('正在从CDN服务器加载trackers_all_ip列表')
             response_trackers_all_ip = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_ip.txt')
-            logging.info('正在从CDN服务器加载trackers_all_ip列表')
         finally:
             result = result + response_trackers_all_ip.read().decode('utf-8').replace('\n\n', ',')
 
     if config['trackers_all_udp']:
         try:
+            logging.info('正在从Github加载trackers_all_udp列表')
             response_trackers_all_udp = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_udp.txt')
-            logging.info('正在从Github加载trackers_all_udp列表')
         except urllib.error.URLError:
+            logging.info('Github加载trackers_all_udp失败')
+            logging.info('正在从CDN服务器加载trackers_all_udp列表')
             response_trackers_all_udp = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_udp.txt')
-            logging.info('正在从CDN服务器加载trackers_all_udp列表')
         finally:
             result = result + response_trackers_all_udp.read().decode('utf-8').replace('\n\n', ',')
     return result
@@ -89,18 +93,19 @@ def update_tracker(tracker_url):
         result.append('bt-tracker=' + tracker_url + '\n')
     with open(config['aria2_config_path'] + '/aria2.conf', 'w') as file:
         file.write(''.join(result))
-    logging.info('更新tracker列表')
+    logging.info('开始更新tracker列表')
 
 
 if __name__ == '__main__':
+    path = __file__[:__file__.rfind("/")]
     logging.basicConfig(level=logging.INFO,
-                        filename='./running.log',
+                        filename=path + '/running.log',
                         filemode='a',
                         format='%(asctime)s: %(message)s'
                         )
 
     if len(sys.argv) > 1 and sys.argv[1] == '--delete':
-        os.system('rm -rf ./running.log')
+        os.system('rm -rf ' + path + '/running.log')
         exit()
 
     url = get_tracker()
