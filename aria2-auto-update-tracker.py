@@ -1,4 +1,5 @@
 import os
+import sys
 import urllib.request
 import urllib.error
 import logging
@@ -29,49 +30,49 @@ def get_tracker():
     logging.info('开始获取tracker列表。')
     if config['trackers_all_http']:
         try:
-            logging.info('正在从Github加载trackers_all_http列表')
             response_trackers_all_http = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_http.txt')
+            logging.info('正在从Github加载trackers_all_http列表')
         except urllib.error.URLError:
-            logging.info('正在从CDN服务器加载trackers_all_http列表')
             response_trackers_all_http = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_http.txt')
+            logging.info('正在从CDN服务器加载trackers_all_http列表')
         finally:
             result = result + response_trackers_all_http.read().decode('utf-8').replace('\n\n', ',')
 
     if config['trackers_all_https']:
         try:
-            logging.info('正在从Github加载trackers_all_https列表')
             response_trackers_all_https = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_https.txt')
+            logging.info('正在从Github加载trackers_all_https列表')
         except urllib.error.URLError:
-            logging.info('正在从CDN服务器加载trackers_all_https列表')
             response_trackers_all_https = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_https.txt')
+            logging.info('正在从CDN服务器加载trackers_all_https列表')
         finally:
             result = result + response_trackers_all_https.read().decode('utf-8').replace('\n\n', ',')
 
     if config['trackers_all_ip']:
         try:
-            logging.info('正在从Github加载trackers_all_ip列表')
             response_trackers_all_ip = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_ip.txt')
+            logging.info('正在从Github加载trackers_all_ip列表')
         except urllib.error.URLError:
-            logging.info('正在从CDN服务器加载trackers_all_ip列表')
             response_trackers_all_ip = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_ip.txt')
+            logging.info('正在从CDN服务器加载trackers_all_ip列表')
         finally:
             result = result + response_trackers_all_ip.read().decode('utf-8').replace('\n\n', ',')
 
     if config['trackers_all_udp']:
         try:
-            logging.info('正在从Github加载trackers_all_udp列表')
             response_trackers_all_udp = urllib.request.urlopen(
                 'https://raw.githubusercontent.com/ngosang/trackerslist/master/trackers_all_udp.txt')
+            logging.info('正在从Github加载trackers_all_udp列表')
         except urllib.error.URLError:
-            logging.info('正在从CDN服务器加载trackers_all_udp列表')
             response_trackers_all_udp = urllib.request.urlopen(
                 'https://cdn.jsdelivr.net/gh/ngosang/trackerslist/trackers_all_udp.txt')
+            logging.info('正在从CDN服务器加载trackers_all_udp列表')
         finally:
             result = result + response_trackers_all_udp.read().decode('utf-8').replace('\n\n', ',')
     return result
@@ -93,10 +94,15 @@ def update_tracker(tracker_url):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO,
-                        filename='/root/aria2-auto-update-tracker.log',
+                        filename='./running.log',
                         filemode='a',
                         format='%(asctime)s: %(message)s'
                         )
+
+    if sys.argv[1] == '--delete':
+        os.system('rm -rf ./running.log')
+        exit()
+
     url = get_tracker()
     update_tracker(url)
     service_restart()
