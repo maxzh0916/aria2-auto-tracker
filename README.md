@@ -18,3 +18,6 @@ python3 ./aria2-auto-tracker/aria2-auto-update-tracker.py
 `0 */1 * * * root python3 /root/aria2-auto-tracker/aria2-auto-update-tracker.py`
 
 每小时更新一次，其他频率百度。
+
+## 清理日志
+`python3 aria2-auto-update-tracker.py --delete`
