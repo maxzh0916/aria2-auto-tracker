@@ -99,7 +99,7 @@ if __name__ == '__main__':
                         format='%(asctime)s: %(message)s'
                         )
 
-    if len(sys.argv[1]) > 1 and sys.argv[1] == '--delete':
+    if len(sys.argv) > 1 and sys.argv[1] == '--delete':
         os.system('rm -rf ./running.log')
         exit()
 
